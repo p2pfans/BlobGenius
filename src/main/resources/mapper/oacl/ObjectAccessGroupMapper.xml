@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.oacl.ObjectAccessGroupMapper">
+    <select id="getGroup" resultType="com.toipr.model.oacl.ObjectAccessGroup">
+        select * from ${table} where gid=#{gid}
+    </select>
+
+    <select id="groupExists" resultType="java.lang.Integer">
+        select id from ${table} where uid=#{uid} and name=#{name}
+    </select>
+
+    <delete id="removeGroup">
+        delete from ${table} where gid=#{gid}
+    </delete>
+
+    <insert id="addGroup" parameterType="com.toipr.model.oacl.ObjectAccessGroup">
+        insert into ${table}(gid, pid, name, brief, uidCreate, timeCreate) values(#{item.gid},
+            #{item.pid}, #{item.name}, #{item.brief}, #{item.uidCreate}, #{item.timeCreate})
+    </insert>
+</mapper>

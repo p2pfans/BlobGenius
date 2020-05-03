@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.data.DataObjectMapper">
+    <select id="tableExists"  resultType="int">
+        select count(1) from information_schema.TABLES where TABLE_SCHEMA=#{dbName} and TABLE_NAME=#{tblName}
+    </select>
+
+    <update id="createTable">
+        CREATE TABLE IF NOT EXISTS ${tblName} (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `uuid` varchar(16) DEFAULT NULL,
+          `doid` varchar(16) DEFAULT NULL,
+          `state` smallint(6) DEFAULT '0',
+          `flags` smallint(6) DEFAULT '0',
+          `oid` varchar(16) DEFAULT NULL,
+          `pid` varchar(16) DEFAULT NULL,
+          `rid` varchar(16) DEFAULT NULL,
+          `uid` varchar(16) DEFAULT NULL,
+          `name` varchar(512) DEFAULT NULL,
+          `path` varchar(512) DEFAULT NULL,
+          `size` int(11) DEFAULT '0',
+          `hash` varchar(72) DEFAULT NULL,
+          `blobSize` int(11) DEFAULT '1048576',
+          `mimeType` varchar(128) DEFAULT NULL,
+          `tag` varchar(24) DEFAULT NULL,
+          `version` int(11) DEFAULT '0',
+          `download` bigint(20) DEFAULT '0',
+          `ipAddr` varchar(20) DEFAULT NULL,
+          `timeCreate` datetime DEFAULT NULL,
+          `lastAccess` datetime DEFAULT NULL,
+          `lastModify` datetime DEFAULT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `uuidIndex` (`uuid`) USING HASH,
+          KEY `doidIndex` (`doid`) USING BTREE
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+    </update>
+
+    <select id="getObject" resultType="com.toipr.model.data.DataObject">
+        select * from ${table} where uuid=#{uuid}
+    </select>
+
+    <select id="objectExists" resultType="java.lang.Integer">
+        select id from ${table} where uuid=#{uuid}
+    </select>
+
+    <delete id="removeObject">
+        delete from ${table} where uuid=#{uuid}
+    </delete>
+
+    <update id="setState">
+        update ${table} set state=#{state} where uuid=#{uuid}
+    </update>
+
+    <update id="setFlags">
+        update ${table} set flags=#{flags} where uuid=#{uuid}
+    </update>
+
+    <update id="setOid">
+        update ${table} set oid=#{oid} where uuid=#{uuid}
+    </update>
+
+    <update id="setPid">
+        update ${table} set pid=#{pid} where uuid=#{uuid}
+    </update>
+
+    <update id="setRid">
+        update ${table} set rid=#{rid} where uuid=#{uuid}
+    </update>
+
+    <update id="incObjectDown">
+        update ${table} set download=download+1, lastAccess=#{lastAccess} where uuid=#{uuid}
+    </update>
+
+    <insert id="addObject" parameterType="com.toipr.model.data.DataObject">
+        insert into ${table}(uuid, doid, state, flags, oid, pid, rid, uid, name, path, size, hash, blobSize,
+          download, mimeType, tag, version, ipAddr, timeCreate, lastAccess, lastModify) values(#{item.uuid},
+          #{item.doid}, #{item.state}, #{item.flags}, #{item.oid}, #{item.pid}, #{item.rid}, #{item.uid},
+          #{item.name}, #{item.path}, #{item.size}, #{item.hash}, #{item.blobSize}, #{item.download},
+          #{item.mimeType}, #{item.tag}, #{item.version}, #{item.ipAddr}, #{item.timeCreate},
+          #{item.lastAccess}, #{item.lastModify})
+    </insert>
+</mapper>

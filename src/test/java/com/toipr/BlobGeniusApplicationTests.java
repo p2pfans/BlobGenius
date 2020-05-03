@@ -1,0 +1,13 @@
+package com.toipr;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class BlobGeniusApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

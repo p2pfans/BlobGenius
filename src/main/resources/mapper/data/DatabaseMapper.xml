@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.data.DatabaseMapper">
+    <select id="dbExists"  resultType="int">
+        select count(1) from information_schema.SCHEMATA where SCHEMA_NAME=#{dbName}
+    </select>
+
+    <select id="getTables" resultType="string">
+        select TABLE_NAME from information_schema.TABLES where TABLE_SCHEMA=#{dbName}
+    </select>
+
+    <update id="dbCreate">
+        CREATE DATABASE IF NOT EXISTS ${dbName}
+          DEFAULT CHARACTER SET utf8mb4
+          DEFAULT COLLATE utf8mb4_general_ci
+    </update>
+</mapper>

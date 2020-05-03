@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.node.CacheNodeMapper">
+    <select id="getNodeList" resultType="com.toipr.model.node.CacheNode">
+        select * from cache_node where 1=1
+        <if test="params.name!=null and params.name!=''">
+            and name=#{params.name}
+        </if>
+        <if test="params.host!=null and params.host!=''">
+            and host=#{params.host}
+        </if>
+        <if test="params.dbIndex!=null and params.dbIndex>=0">
+            and dbIndex=#{params.dbIndex}
+        </if>
+        <if test="count!=null and count>0">
+            limit #{start}, #{count}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(1) from cache_node where 1=1
+        <if test="params.name!=null and params.name!=''">
+            and name=#{params.name}
+        </if>
+        <if test="params.host!=null and params.host!=''">
+            and host=#{params.host}
+        </if>
+        <if test="params.dbIndex!=null and params.dbIndex>=0">
+            and dbIndex=#{params.dbIndex}
+        </if>
+    </select>
+
+    <select id="nodeExists" resultType="java.lang.Integer">
+        select id from cache_node where 1=1
+        <if test="params.name!=null and params.name!=''">
+            and name=#{params.name}
+        </if>
+        <if test="params.host!=null and params.host!=''">
+            and host=#{params.host}
+        </if>
+        <if test="params.dbIndex!=null and params.dbIndex>=0">
+            and dbIndex=#{params.dbIndex}
+        </if>
+    </select>
+
+    <select id="getNode" resultType="com.toipr.model.node.CacheNode">
+        select * from cache_node where id=#{id}
+    </select>
+
+    <update id="setState">
+        update cache_node set state=#{state} where id=#{id}
+    </update>
+
+    <update id="setDistKey">
+        update cache_node set distKey=#{distKey} where id=#{id}
+    </update>
+    <update id="setDistRule">
+        update cache_node set distRule=#{distRule} where id=#{id}
+    </update>
+
+    <delete id="removeNode">
+        delete from cache_node where id=#{id}
+    </delete>
+
+    <insert id="addNode" parameterType="com.toipr.model.node.CacheNode">
+        insert into cache_node(state, host, name, dbIndex, master, dbPass, distKey, distRule, totalVisit,
+          timeCreate, lastAccess) values(#{item.state}, #{item.host}, #{item.name}, #{item.dbIndex}, #{item.master},
+          #{item.dbPass}, #{item.distKey}, #{item.distRule}, #{item.totalVisit}, #{item.timeCreate}, #{item.lastAccess})
+    </insert>
+</mapper>

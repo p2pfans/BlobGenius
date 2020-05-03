@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="mysettings" class="com.toipr.conf.MySettings">
+        <property name="hostid" value="hidc10644ce6b315f366316630aafc08cc6"></property>
+        <property name="port" value="35168"></property>
+    </bean>
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3309/data_conf?useUnicode=true&amp;serverTimezone=Asia/Shanghai" />
+        <property name="username" value="root" />
+        <property name="password" value="123456" />
+        <property name="defaultAutoCommit" value="false" />
+    </bean>
+</beans>

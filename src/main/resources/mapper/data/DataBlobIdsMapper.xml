@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.data.DataBlobIdsMapper">
+    <select id="tableExists"  resultType="int">
+        select count(1) from information_schema.TABLES where TABLE_SCHEMA=#{dbName} and TABLE_NAME=#{tblName}
+    </select>
+
+    <update id="createTable">
+        CREATE TABLE IF NOT EXISTS ${tblName} (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `uuid` varchar(16) NOT NULL,
+              `boid` varchar(16) NOT NULL,
+              `serial` int(11) DEFAULT '0',
+              `offset` int(11) DEFAULT '0',
+              `size` int(11) DEFAULT '0',
+              `hash` varchar(72) DEFAULT NULL,
+              PRIMARY KEY (`id`),
+              KEY `uuidIndex` (`uuid`) USING BTREE,
+              KEY `boidIndex` (`boid`) USING BTREE
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+    </update>
+
+    <select id="getObject" resultType="com.toipr.model.data.DataBlobIds">
+        select * from ${table} where uuid=#{uuid} and boid=#{boid}
+    </select>
+    <select id="getObjects" resultType="com.toipr.model.data.DataBlobIds">
+        select * from ${table} where uuid=#{uuid} order by serial asc
+    </select>
+
+    <select id="objectExists" resultType="int">
+        select count(1) from ${table} where uuid=#{uuid}
+    </select>
+    <select id="blobExists" resultType="int">
+        select count(1) from ${table} where uuid=#{uuid} and boid=#{boid}
+    </select>
+
+    <delete id="removeObject">
+        delete from ${table} where uuid=#{uuid}
+    </delete>
+    <delete id="removeBlob">
+        delete from ${table} where uuid=#{uuid} and boid=#{boid}
+    </delete>
+
+    <insert id="addObject" parameterType="com.toipr.model.data.DataBlobIds">
+        insert into ${table}(uuid, boid, serial, offset, size, hash) values(#{item.uuid},
+          #{item.boid}, #{item.serial}, #{item.offset}, #{item.size}, #{item.hash})
+    </insert>
+</mapper>

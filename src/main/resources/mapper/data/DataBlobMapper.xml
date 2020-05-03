@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.data.DataBlobMapper">
+    <select id="tableExists"  resultType="int">
+        select count(1) from information_schema.TABLES where TABLE_SCHEMA=#{dbName} and TABLE_NAME=#{tblName}
+    </select>
+
+    <update id="createTable">
+        CREATE TABLE IF NOT EXISTS ${tblName} (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `boid` varchar(16) DEFAULT NULL,
+              `flags` int(11) DEFAULT '0',
+              `size` int(11) DEFAULT '0',
+              `copy` int(11) DEFAULT '0',
+              `refs` int(11) DEFAULT '0',
+              `hash` varchar(72) DEFAULT NULL,
+              `download` bigint(20) DEFAULT '0',
+              `timeCreate` datetime DEFAULT NULL,
+              `lastAccess` datetime DEFAULT NULL,
+              `data` mediumblob,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `bidIndex` (`boid`) USING HASH,
+              KEY `refLastIndex` (`refs`,`lastAccess`) USING BTREE,
+              KEY `downIndex` (`download`) USING BTREE
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+    </update>
+
+    <select id="getBlob" resultType="com.toipr.model.data.DataBlob">
+        select * from ${table} where boid=#{boid}
+    </select>
+
+    <select id="getBlobMeta" resultType="com.toipr.model.data.DataBlob">
+        select id, boid, flags, size, refs, downTimes, lastAccess from ${table} where boid=#{bid}
+    </select>
+
+    <select id="blobExists" resultType="java.lang.Integer">
+        select id from ${table} where boid=#{boid}
+    </select>
+
+    <delete id="removeBlob">
+        delete from ${table} where boid=#{boid}
+    </delete>
+    <delete id="removeAllBlobs">
+        delete from ${table} where boid in (
+        <foreach item="boid" collection="idList" open="(" close=")" separator=",">
+            #{boid}
+        </foreach>
+    </delete>
+
+    <update id="incBlobDown">
+        update ${table} set download=download+1, lastAccess=#{lastAccess} where boid=#{boid}
+    </update>
+
+    <update id="incBlobRefs">
+        update ${table} set refs=refs+1 where boid=#{boid}
+    </update>
+
+    <update id="decBlobRefs">
+        update ${table} set refs=refs-1 where boid=#{boid} and refs>0
+    </update>
+
+    <update id="decAllBlobRefs">
+        update ${table} set refs=refs-1 where boid in
+        <foreach collection="rlist" item="boid" separator="," open="," close=")">
+            #{boid}
+        </foreach>
+        and refs>0
+    </update>
+
+    <insert id="addBlob" parameterType="com.toipr.model.data.DataBlob">
+        insert into ${table}(boid, flags, size, copy, refs, hash, download, timeCreate, lastAccess, data)
+          values(#{blob.boid}, #{blob.flags}, #{blob.size}, #{blob.copy}, #{blob.refs}, #{blob.hash},
+                 #{blob.download}, #{blob.timeCreate}, #{blob.lastAccess}, #{blob.data})
+    </insert>
+</mapper>

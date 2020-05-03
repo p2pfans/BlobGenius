@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.resource.DataRuleMapper">
+    <select id="getRuleList" resultType="com.toipr.model.data.DataRule">
+        select * from data_rules where 1=1
+        <if test="params.resource!=null and params.resource!=''">
+            and resource=#{params.resource}
+        </if>
+        <if test="params.dataType!=null and params.dataType!=''">
+            and dataType=#{params.dataType}
+        </if>
+        <if test="params.oid!=null and params.oid!=''">
+            and oid=#{params.oid}
+        </if>
+        <if test="params.rid!=null and params.rid!=''">
+            and rid=#{params.rid}
+        </if>
+        <if test="count>0">
+            limit #{start}, #{count}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(1) from data_rules where 1=1
+        <if test="params.resource!=null and params.resource!=''">
+            and resource=#{params.resource}
+        </if>
+        <if test="params.dataType!=null and params.dataType!=''">
+            and dataType=#{params.dataType}
+        </if>
+        <if test="params.oid!=null and params.oid!=''">
+            and oid=#{params.oid}
+        </if>
+    </select>
+
+    <select id="getRule" resultType="com.toipr.model.data.DataRule">
+        select * from data_rules where rid=#{rid}
+    </select>
+
+    <select id="ruleExists" resultType="String">
+        select rid from data_rules where oid=#{oid} and resource=#{resource} and dataType=#{dataType}
+    </select>
+
+    <delete id="removeRule">
+        delete from data_rules where rid=#{rid}
+    </delete>
+
+    <update id="setRuleHost">
+        update data_rules set ruleHost=#{ruleHost} where rid=#{rid}
+    </update>
+
+    <update id="setRuleTable">
+        update data_rules set ruleTable=#{ruleTable} where rid=#{rid}
+    </update>
+
+    <update id="setTable">
+        update data_rules set dbName=#{dbName}, tblName=#{tblName} where rid=#{rid}
+    </update>
+
+    <update id="setTableSQL">
+        update data_rules set
+        <if test="isTable==true">
+            tblSql=#{sqlText}
+        </if>
+        <if test="isTable==false">
+            dbSql=#{sqlText}
+        </if>
+        where rid=#{rid}
+    </update>
+
+    <insert id="addRule" parameterType="com.toipr.model.data.DataRule">
+        insert into data_rules(rid, oid, resource, dataType, dbName, tblName, ruleHost,
+          ruleTable, maxCopy, blobSize, tblTag, dbSql, tblSql) values(#{item.rid}, #{item.oid}, #{item.resource},
+          #{item.dataType}, #{item.dbName}, #{item.tblName}, #{item.ruleHost}, #{item.ruleTable},
+          #{item.maxCopy}, #{item.blobSize}, #{item.tblTag}, #{item.dbSql}, #{item.tblSql})
+    </insert>
+</mapper>

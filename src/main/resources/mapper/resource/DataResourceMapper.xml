@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.resource.DataResourceMapper">
+    <select id="getAllResources" resultType="com.toipr.model.data.DataResource">
+        select * from data_resource where 1=1
+        <if test="params.oid!=null and params.oid!=''">
+            and oid=#{params.oid}
+        </if>
+        <if test="params.name!=null and params.name!=''">
+            and name=#{params.name}
+        </if>
+        <if test="params.code!=null and params.code!=''">
+            and code=#{params.code}
+        </if>
+        <if test="params.dataType!=null and params.dataType!=''">
+            and dataType=#{params.dataType}
+        </if>
+        <if test="params.state!=null and params.state>=0">
+            and state=#{params.state}
+        </if>
+        <if test="count!=null and count>0">
+            limit #{start}, #{count}
+        </if>
+    </select>
+
+    <select id="getResource" resultType="com.toipr.model.data.DataResource">
+        select * from data_resource where rid=#{rid}
+    </select>
+    <select id="getResource2" resultType="com.toipr.model.data.DataResource">
+        select * from data_resource where oid=#{oid} and code=#{code}
+    </select>
+
+    <select id="countResource" resultType="int">
+        select count(1) from data_resource where 1=1
+        <if test="params.oid!=null and params.oid!=''">
+            and oid=#{params.oid}
+        </if>
+        <if test="params.name!=null and params.name!=''">
+            and name=#{params.name}
+        </if>
+        <if test="params.code!=null and params.code!=''">
+            and code=#{params.code}
+        </if>
+        <if test="params.dataType!=null and params.dataType!=''">
+            and dataType=#{params.dataType}
+        </if>
+        <if test="params.state!=null and params.state>=0">
+            and state=#{params.state}
+        </if>
+    </select>
+
+    <select id="resourceExists" resultType="java.lang.String">
+        select rid from data_resource where oid=#{oid} and code=#{code}
+    </select>
+
+    <delete id="removeResource">
+        delete from data_resource where rid=#{rid}
+    </delete>
+
+    <update id="incVisitAndLastAccess">
+        update data_resource set totalVisit=totalVisit+#{delta}, lastAccess=#{lastAccess} where rid=#{rid}
+    </update>
+
+    <update id="setState">
+        update data_resource set state=#{state} where rid=#{rid}
+    </update>
+
+    <update id="setTotalCount">
+        update data_resource set totalCount=#{totalCount} where rid=#{rid}
+    </update>
+
+    <update id="setTotalSpace">
+        update data_resource set totalSpace=#{totalSpace} where rid=#{rid}
+    </update>
+
+    <insert id="addResource" parameterType="com.toipr.model.data.DataResource">
+        insert into data_resource(state, rid, oid, code, name, tags, brief, maxCount, maxSpace, totalVisit, totalCount,
+            totalSpace, ipAddr, uidCreate, timeCreate, lastAccess) values(#{item.state}, #{item.rid},
+            #{item.oid}, #{item.code}, #{item.name}, #{item.tags}, #{item.brief}, #{item.maxCount}, #{item.maxSpace},
+            #{item.totalVisit}, #{item.totalCount}, #{item.totalSpace}, #{item.ipAddr}, #{item.uidCreate}, #{item.timeCreate}, #{item.lastAccess})
+    </insert>
+</mapper>

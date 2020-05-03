@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.conf.SysConfMapper">
+    <select id="getAllConf" resultType="com.toipr.model.conf.SysConf">
+        select * from sys_conf where 1=1
+    </select>
+
+    <select id="exists" resultType="int">
+        select count(1) from sys_conf where name=#{name}
+    </select>
+
+    <delete id="remove">
+        delete from sys_conf where name=#{name}
+    </delete>
+
+    <update id="setConf">
+        update sys_conf set type=#{type}, value=#{value} where name=#{name}
+    </update>
+
+    <insert id="addConf" parameterType="com.toipr.model.conf.SysConf">
+        insert into sys_conf(name, type, value) values(#{name}, #{type}, #{value})
+    </insert>
+</mapper>

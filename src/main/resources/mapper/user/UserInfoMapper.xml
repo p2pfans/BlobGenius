@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.user.UserInfoMapper">
+    <select id="getUserList" resultType="com.toipr.model.user.UserInfo">
+        select * from ${table} where 1=1
+        <if test="params.oid!=null and params.oid!=''">
+            and oid=#{params.oid}
+        </if>
+        <if test="params.state!=null and params.state>=0">
+            and state=#{params.state}
+        </if>
+        <if test="params.phone!=null and params.phone>=0">
+            and phone=#{params.phone}
+        </if>
+        <if test="params.email!=null and params.email>=0">
+            and email=#{params.email}
+        </if>
+        <if test="params.username!=null and params.username>=0">
+            and username=#{params.username}
+        </if>
+        <if test="count>0">
+            limit #{start}, #{count}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(1) from ${table} where 1=1
+        <if test="params.oid!=null and params.oid!=''">
+            and oid=#{params.oid}
+        </if>
+        <if test="params.state!=null and params.state>=0">
+            and state=#{params.state}
+        </if>
+        <if test="params.phone!=null and params.phone>=0">
+            and phone=#{params.phone}
+        </if>
+        <if test="params.email!=null and params.email>=0">
+            and email=#{params.email}
+        </if>
+        <if test="params.username!=null and params.username>=0">
+            and username=#{params.username}
+        </if>
+    </select>
+
+    <select id="getUser" resultType="com.toipr.model.user.UserInfo">
+        select * from ${table} where uid=#{uid}
+    </select>
+
+    <select id="checkUser" resultType="com.toipr.model.user.UserInfo">
+        select * from ${table} where username=#{name} and password=#{pass}
+    </select>
+
+    <select id="getUserByEmail" resultType="com.toipr.model.user.UserInfo">
+        select * from ${table} where email=#{email}
+    </select>
+
+    <select id="getUserByPhone" resultType="com.toipr.model.user.UserInfo">
+        select * from ${table} where phone=#{phone}
+    </select>
+
+    <select id="userExists" resultType="string">
+        select uid from ${table} where username=#{name}
+    </select>
+
+    <delete id="removeUser">
+        delete from ${table} where uid=#{uid}
+    </delete>
+
+    <update id="setState">
+        update ${table} set state=#{state} where uid=#{uid}
+    </update>
+
+    <update id="setLevel">
+        update ${table} set level=#{level} where uid=#{uid}
+    </update>
+
+    <update id="setOrgAndTitle">
+        update ${table} set org=#{org}, oid=#{oid}, title=#{title} where uid=#{uid}
+    </update>
+
+    <update id="setPhone">
+        update ${table} set phone=#{phone} where uid=#{uid}
+    </update>
+
+    <update id="setEmail">
+        update ${table} set email=#{email} where uid=#{uid}
+    </update>
+
+    <update id="incLoginAndLastAccess">
+        update ${table} set totalLogin=totalLogin+1, lastIpAddr=#{ipAddr}, lastAccess=#{lastAccess} where uid=#{uid}
+    </update>
+
+    <insert id="addUser" parameterType="com.toipr.model.user.UserInfo">
+        insert into ${table}(state, level, uid, username, password, nickname, sex, oid, org, title, phone,
+            email, maxCount, maxSpace, totalLogin, ipAddr, timeCreate, lastAccess, lastIpAddr)
+            values(#{item.state}, #{item.level}, #{item.uid}, #{item.username}, #{item.password}, #{item.nickname},
+              #{item.sex}, #{item.oid}, #{item.org}, #{item.title}, #{item.phone}, #{item.email},
+              #{item.maxCount}, #{item.maxSpace}, #{item.totalLogin}, #{item.ipAddr}, #{item.timeCreate},
+              #{item.lastAccess}, #{item.lastIpAddr})
+    </insert>
+</mapper>

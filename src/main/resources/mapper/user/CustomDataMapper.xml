@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.user.CustomDataMapper">
+    <select id="getAllData" resultType="com.toipr.model.user.CustomData">
+        select * from ${table} where oid=#{oid}
+    </select>
+
+    <select id="getData" resultType="com.toipr.model.user.CustomData">
+        select * from ${table} where oid=#{oid} and field=#{field}
+    </select>
+
+    <select id="getDataString" resultType="java.lang.String">
+        select value from ${table} where oid=#{oid} and field=#{field}
+    </select>
+
+    <delete id="removeData">
+        delete from ${table} where oid=#{oid}
+        <if test="field!=null and field!=''">
+            and field=#{field}
+        </if>
+    </delete>
+
+    <update id="setData">
+        update ${table} set value=#{value} where oid=#{oid} and field=#{field}
+    </update>
+
+    <insert id="addData" parameterType="com.toipr.model.user.CustomData">
+        insert into ${table}(oid, field, value) values(#{item.oid}, #{item.field}, #{item.value})
+    </insert>
+</mapper>

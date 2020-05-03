@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.oacl.ObjectAccessControlMapper">
+    <select id="getAccessControl" resultType="com.toipr.model.oacl.ObjectAccessControl">
+        select * from ${table} where oid=#{oid} and doid=#{doid}
+    </select>
+
+    <select id="accessControlExists" resultType="java.lang.Integer">
+        select id from ${table} where oid=#{oid} and doid=#{doid}
+    </select>
+
+    <delete id="removeAccessControl">
+        delete from ${table} where oid=#{oid} and doid=#{doid}
+    </delete>
+
+    <insert id="addAccessControl" parameterType="com.toipr.model.oacl.ObjectAccessControl">
+        insert into ${table}(oid, doid, isRes, canRead, canModify, canDelete, ipAddr, uidGrant, timeGrant)
+            values(#{oacl.oid}, #{oacl.doid}, #{oacl.isRes}, #{oacl.canRead}, #{oacl.canModify},
+                   #{oacl.canDelete}, #{oacl.ipAddr}, #{oacl.uidGrant}, #{oacl.timeGrant})
+    </insert>
+</mapper>

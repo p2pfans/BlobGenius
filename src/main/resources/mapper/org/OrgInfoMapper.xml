@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.org.OrgInfoMapper">
+    <select id="getOrgList" resultType="com.toipr.model.user.OrgInfo">
+        select * from ${table} where 1=1
+        <if test="params.state>=0">
+            and state=#{params.state}
+        </if>
+        <if test="params.abbr!=null and params.abbr!=''">
+            and abbr=#{params.abbr}
+        </if>
+        <if test="params.name!=null and params.name!=''">
+            and name=#{params.name}
+        </if>
+        <if test="count!=null and count>0">
+            limit #{start}, #{count}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(1) from ${table} where 1=1
+        <if test="params.state>=0">
+            and state=#{params.state}
+        </if>
+        <if test="params.abbr!=null and params.abbr!=''">
+            and abbr=#{params.abbr}
+        </if>
+        <if test="params.name!=null and params.name!=''">
+            and name=#{params.name}
+        </if>
+    </select>
+
+    <select id="getOrg" resultType="com.toipr.model.user.OrgInfo">
+        select * from ${table} where oid=#{oid}
+    </select>
+
+    <select id="orgExists" resultType="string">
+        select oid from ${table} where name=#{name}
+        <if test="pid!=null and pid!=''">
+            and pid=#{pid}
+        </if>
+    </select>
+
+    <delete id="removeOrg">
+        delete from ${table} where oid=#{oid}
+    </delete>
+
+    <update id="setState">
+        update ${table} set state=#{state} where oid=#{oid}
+    </update>
+
+    <insert id="addOrg" parameterType="com.toipr.model.user.OrgInfo">
+        insert into ${table}(state, level, oid, pid, name, abbr, contact, title, email, phone, logo, website,
+            uidAdmin, maxCount, maxSpace, ipAddr, uidCreate, timeCreate) values(#{item.state}, #{item.level},
+            #{item.oid}, #{item.pid}, #{item.name}, #{item.abbr}, #{item.contact}, #{item.title}, #{item.email}, #{item.phone},
+            #{item.logo}, #{item.website}, #{item.uidAdmin}, #{item.maxCount}, #{item.maxSpace}, #{item.ipAddr}, #{item.uidCreate}, #{item.timeCreate})
+    </insert>
+</mapper>

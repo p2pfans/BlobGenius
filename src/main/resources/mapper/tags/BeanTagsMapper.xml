@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.tags.CustomTagsMapper">
+    <select id="getAllCustomTags" resultType="com.toipr.model.tags.CustomTags">
+        select * from custom_tags where 1=1
+        <if test="type!=null and type!=''">
+            and type=#{type}
+        </if>
+    </select>
+
+    <select id="getCustomTags" resultType="com.toipr.model.tags.CustomTags">
+        select * from custom_tags where id=#{id}
+    </select>
+
+    <select id="customTagsExists" resultType="java.lang.Integer">
+        select id from custom_tags where type=#{type} and key=#{key}
+        <if test="pid!=0">
+            and pid=#{pid}
+        </if>
+    </select>
+
+    <delete id="removeCumstomTags">
+        delete from custom_tags where id=#{id}
+    </delete>
+
+    <insert id="addCustomTags" parameterType="com.toipr.model.tags.CustomTags">
+        insert into custom_tags(pid, type, key, value, keyType, valType, elemType, uidCreate, timeCreate)
+            values(#{node.pid}, #{node.type}, #{node.key}, #{node.value}, #{node.keyType},
+                  #{node.valType}, #{node.elemType}, #{node.uidCreate}, #{node.timeCreate})
+    </insert>
+</mapper>

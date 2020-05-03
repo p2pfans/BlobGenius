@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.node.DataNodeMapper">
+    <select id="getNodeList" resultType="com.toipr.model.node.DataNode">
+        select * from data_node where 1=1
+        <if test="params.rid!=null and params.rid!=''">
+            and rid=#{params.rid}
+        </if>
+        <if test="params.dataType!=null and params.dataType!=''">
+            and dataType=#{params.dataType}
+        </if>
+        <if test="params.state!=null and params.state>=0">
+            and state=#{params.state}
+        </if>
+        <if test="params.host!=null and params.host!=''">
+            and host=#{params.host}
+        </if>
+        <if test="params.hid!=null and params.hid!=''">
+            and hid=#{params.hid}
+        </if>
+        <if test="params.dbType!=null and params.dbType!=''">
+            and dbType=#{params.dbType}
+        </if>
+        <if test="count!=null and count>0">
+            limit #{start}, #{count}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(1) from data_node where 1=1
+        <if test="params.rid!=null and params.rid!=''">
+            and rid=#{params.rid}
+        </if>
+        <if test="params.dataType!=null and params.dataType!=''">
+            and dataType=#{params.dataType}
+        </if>
+        <if test="params.host!=null and params.host!=''">
+            and host=#{params.host}
+        </if>
+        <if test="params.dbType!=null and params.dbType!=''">
+            and dbType=#{params.dbType}
+        </if>
+    </select>
+
+    <select id="getNode" resultType="com.toipr.model.node.DataNode">
+        select * from data_node where hid=#{hid}
+    </select>
+
+    <select id="nodeExists" resultType="java.lang.String">
+        select hid from data_node where 1=1
+        <if test="params.protocol!=null and params.protocol!=''">
+            and protocol=#{params.protocol}
+        </if>
+        <if test="params.dataType!=null and params.dataType!=''">
+            and dataType=#{params.dataType}
+        </if>
+        <if test="params.state!=null and params.state>=0">
+            and state=#{params.state}
+        </if>
+        <if test="params.host!=null and params.host!=''">
+            and host=#{params.host}
+        </if>
+        <if test="params.dbType!=null and params.dbType!=''">
+            and dbType=#{params.dbType}
+        </if>
+    </select>
+
+    <update id="setState">
+        update data_node set state=#{state} where hid=#{hid}
+    </update>
+
+    <update id="incVisitAndLastAccess">
+        update data_node set totalVisit=totalVisit + #{visit}, lastAlive=#{lastAccess} where hid=#{hid}
+    </update>
+
+    <update id="setDistKey">
+        update data_node set distKey=#{distKey} where hid=#{hid}
+    </update>
+
+    <delete id="removeNode">
+        delete from data_node where hid=#{hid}
+    </delete>
+
+    <insert id="addNode" parameterType="com.toipr.model.node.DataNode">
+        insert into data_node(state, hid, host, hostid, protocol, dbType, master, useUnicode,
+          rid, dataType, distKey, timeZone, dbUser, dbPass, filePath, fileHost, driverClass, totalVisit,
+          tmCreate, lastAlive) values(#{node.state}, #{node.hid}, #{node.host}, #{node.hostid},
+          #{node.protocol}, #{node.dbType}, #{node.master}, #{node.useUnicode}, #{node.rid},
+          #{node.dataType}, #{node.distKey}, #{node.timeZone}, #{node.dbUser}, #{node.dbPass}, #{node.filePath},
+          #{node.fileHost}, #{node.driverClass}, #{node.totalVisit}, #{node.tmCreate}, #{node.lastAlive})
+    </insert>
+</mapper>
