@@ -2,7 +2,7 @@ package com.toipr.service.server;
 
 import com.toipr.model.data.DataBlob;
 import com.toipr.model.data.DataObject;
-import com.toipr.model.data.DataBlobIds;
+import com.toipr.model.data.DataBlobRef;
 
 import java.util.Date;
 import java.util.List;
@@ -137,8 +137,8 @@ public interface DataServer {
      * @param obj 数据对象ID串
      * @return 数据记录号，不唯一，大于0成功
      */
-    int addBlobIds(DataBlobIds obj);
-    int addBlobIds(DataBlobIds obj, int direction);
+    int addBlobIds(DataBlobRef obj);
+    int addBlobIds(DataBlobRef obj, int direction);
 
     /**
      * 删除数据对象ID串
@@ -154,16 +154,16 @@ public interface DataServer {
      * @param boid 数据块ID
      * @return 数据记录号，不唯一，大于0成功
      */
-    DataBlobIds getBlobIds(String uuid, String boid);
-    DataBlobIds getBlobIds(String uuid, String boid, int direction);
+    DataBlobRef getBlobIds(String uuid, String boid);
+    DataBlobRef getBlobIds(String uuid, String boid, int direction);
 
     /**
      * 获取数字对象doid的数据块索引列表
      * @param uuid 数字对象ID
      * @return 成功=数据块索引列表
      */
-    List<DataBlobIds> getBlobIds(String uuid);
-    List<DataBlobIds> getBlobIds(String uuid, int direction);
+    List<DataBlobRef> getBlobIds(String uuid);
+    List<DataBlobRef> getBlobIds(String uuid, int direction);
 
     /**
      * 数据对象是否存在

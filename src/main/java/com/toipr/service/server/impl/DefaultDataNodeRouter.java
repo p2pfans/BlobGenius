@@ -157,22 +157,22 @@ public class DefaultDataNodeRouter extends DefaultService implements DataNodeRou
     /**
      * 获取服务器路由主键
      * @param rid 资源代码
-     * @param type 数据类型 objects=DataObject, blobIds=DataBlobIds, blobs=DataBlob
-     * @param doid 数据对象ID
+     * @param type 数据类型 objects=DataObject, blobIds=DataBlobRef, blobs=DataBlob
+     * @param uuid 数据对象ID
      * @param oid 拥有者ID
      * @param isTable true=数据表路由 false=数据节点路由
      * @param userData 自定义参数
      * @return 路由主键
      */
-    public String getRouterKey(String rid, String type, String doid, String oid, boolean isTable, Object userData){
+    public String getRouterKey(String rid, String type, String uuid, String oid, boolean isTable, Object userData){
         RuleRouter ruleRouter = RuleRouters.getRuleRouter(rid, type);
         if(ruleRouter==null){
             return null;
         }
         if(isTable){
-            return ruleRouter.getTableKey(doid, oid, userData);
+            return ruleRouter.getTableKey(uuid, oid, userData);
         }
-        return ruleRouter.getNodeKey(doid, oid, userData);
+        return ruleRouter.getNodeKey(uuid, oid, userData);
     }
 
     /**
@@ -187,14 +187,14 @@ public class DefaultDataNodeRouter extends DefaultService implements DataNodeRou
     /**
      * 根据数据类型与ID分配数据节点
      * @param rid 资源ID
-     * @param type 数据类型 object=DataObject, ids=DataBlobIds, blob=DataBlob
-     * @param doid 数据对象ID
+     * @param type 数据类型 object=DataObject, ids=DataBlobRef, blob=DataBlob
+     * @param uuid 数据对象ID
      * @param oid 拥有者ID
      * @param isUpdate 是否是更新操作
      * @param userData 自定义调度参数
      * @return 数据服务器
      */
-    public DataServer getServer(String rid, String type, String doid, String oid, boolean isUpdate, Object userData){
+    public DataServer getServer(String rid, String type, String uuid, String oid, boolean isUpdate, Object userData){
         String resType = rid + "_" + type;
         if(!mapResTypes.containsKey(resType)){
             return null;
@@ -206,7 +206,7 @@ public class DefaultDataNodeRouter extends DefaultService implements DataNodeRou
              * 有外部设置路由器时，优先委派外部路由器定位数据存储结点
              * 外部定位失败时，再由自己查找节点，类似ClassLoader的双亲委托机制
              */
-            server = router.getServer(rid, type, doid, oid, isUpdate, userData);
+            server = router.getServer(rid, type, uuid, oid, isUpdate, userData);
         }
 
         if(server==null){
@@ -217,7 +217,7 @@ public class DefaultDataNodeRouter extends DefaultService implements DataNodeRou
             if(group==null){
                 return null;
             }
-            server = group.getServer(rid, type, doid, oid, isUpdate, userData);
+            server = group.getServer(rid, type, uuid, oid, isUpdate, userData);
         }
         return server;
     }
@@ -225,7 +225,7 @@ public class DefaultDataNodeRouter extends DefaultService implements DataNodeRou
     /**
      * 根据数据类型与ID分配数据节点
      * @param rid 资源代码
-     * @param type 数据类型 objects=DataObject, blobIds=DataBlobIds, blobs=DataBlob
+     * @param type 数据类型 objects=DataObject, blobIds=DataBlobRef, blobs=DataBlob
      * @param distKey 映射主键
      * @param isUpdate 是否是更新操作
      * @param userData 自定义调度参数

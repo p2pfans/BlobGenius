@@ -6,7 +6,7 @@ import java.util.Date;
  * 数字对象的数据块ID串
  * 一个数据对象DataObject可以有若干个DataBlobIds对象
  */
-public class DataBlobIds {
+public class DataBlobRef {
     /**
      * 记录ID，自增长
      */

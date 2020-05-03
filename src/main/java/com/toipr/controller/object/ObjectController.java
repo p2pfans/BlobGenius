@@ -2,13 +2,9 @@ package com.toipr.controller.object;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.toipr.model.data.DataBlob;
-import com.toipr.model.data.DataBlobIds;
+import com.toipr.model.data.DataBlobRef;
 import com.toipr.model.data.DataConst;
 import com.toipr.model.data.DataObject;
-import com.toipr.model.user.UserInfo;
-import com.toipr.service.cache.CacheServer;
-import com.toipr.service.cache.CacheServices;
 import com.toipr.service.data.DataStoreService;
 import com.toipr.service.data.DataStores;
 import com.toipr.service.search.ObjectSearcher;
@@ -16,9 +12,6 @@ import com.toipr.service.search.SearchServices;
 import com.toipr.service.search.SortField;
 import com.toipr.service.token.TokenService;
 import com.toipr.service.token.TokenServices;
-import com.toipr.service.user.UserService;
-import com.toipr.service.user.UserServices;
-import com.toipr.util.HashHelper;
 import com.toipr.util.Utils;
 import com.toipr.util.json.DataObjectHelper;
 import org.springframework.web.bind.annotation.*;
@@ -271,7 +264,7 @@ public class ObjectController {
         return ret.toString();
     }
 
-    @RequestMapping("blobids")
+    @RequestMapping("blobref")
     protected void doDownObjectIds(@RequestBody String jsonText, HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws Exception {
         JSONObject json = JSONObject.parseObject(jsonText);
 
@@ -284,7 +277,7 @@ public class ObjectController {
         doDownObjectIds2(rid, uuid, req, resp, session);
     }
 
-    @RequestMapping("blobids/{rid}/{uuid}")
+    @RequestMapping("blobref/{rid}/{uuid}")
     protected String doDownObjectIds2(@PathVariable("rid") String rid, @PathVariable("uuid") String uuid,
                                       HttpServletRequest req, HttpServletResponse resp, HttpSession session){
         resp.setContentType("application/json");
@@ -311,7 +304,7 @@ public class ObjectController {
         }
 
         DataStoreService store = DataStores.getInstance();
-        List<DataBlobIds> oids = store.getBlobIds(rid, uuid);
+        List<DataBlobRef> oids = store.getBlobIds(rid, uuid);
         if(oids==null){
             ret.put("status", 404);
             ret.put("error", "oid not found");
@@ -320,7 +313,7 @@ public class ObjectController {
             ret.put("total", oids.size());
 
             JSONArray myarr = new JSONArray();
-            for(DataBlobIds temp:oids){
+            for(DataBlobRef temp:oids){
                 JSONObject obj = new JSONObject();
                 obj.put("uuid", temp.getUuid());
                 obj.put("boid", temp.getBoid());

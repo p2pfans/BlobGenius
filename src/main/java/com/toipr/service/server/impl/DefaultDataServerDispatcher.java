@@ -433,23 +433,23 @@ public class DefaultDataServerDispatcher implements DataNodeRouter {
     /**
      * 获取服务器路由主键
      * @param rid 资源代码
-     * @param type 数据类型 objects=DataObject, blobIds=DataBlobIds, blobs=DataBlob
-     * @param doid 数据对象ID
+     * @param type 数据类型 objects=DataObject, blobIds=DataBlobRef, blobs=DataBlob
+     * @param uuid 数据对象ID
      * @param oid 拥有者ID
      * @param isTable true=数据表路由 false=数据节点路由
      * @param userData 自定义参数
      * @return 路由主键
      */
-    public String getRouterKey(String rid, String type, String doid, String oid, boolean isTable, Object userData){
+    public String getRouterKey(String rid, String type, String uuid, String oid, boolean isTable, Object userData){
         RuleRouter router = RuleRouters.getRuleRouter(rid, type);
         if(router==null){
             return null;
         }
 
         if(isTable){
-            return router.getTableKey(doid, oid, userData);
+            return router.getTableKey(uuid, oid, userData);
         }
-        return router.getNodeKey(doid, oid, userData);
+        return router.getNodeKey(uuid, oid, userData);
     }
 
     /**
@@ -467,15 +467,15 @@ public class DefaultDataServerDispatcher implements DataNodeRouter {
     /**
      * 根据数据类型与ID分配数据节点
      * @param rid 资源ID
-     * @param type 数据类型 objects=DataObject, blobids=DataBlobIds, blobs=DataBlob
-     * @param doid 数据对象ID
+     * @param type 数据类型 objects=DataObject, blobids=DataBlobRef, blobs=DataBlob
+     * @param uuid 数据对象ID
      * @param oid 拥有者ID
      * @param isUpdate 是否是更新操作
      * @param userData 自定义调度参数
      * @return 数据服务器
      */
-    public synchronized DataServer getServer(String rid, String type, String doid, String oid, boolean isUpdate, Object userData){
-        String distKey = getRouterKey(rid, type, doid, oid, false, userData);
+    public synchronized DataServer getServer(String rid, String type, String uuid, String oid, boolean isUpdate, Object userData){
+        String distKey = getRouterKey(rid, type, uuid, oid, false, userData);
         if(distKey==null){
             return null;
         }
@@ -488,7 +488,7 @@ public class DefaultDataServerDispatcher implements DataNodeRouter {
     /**
      * 根据数据类型与ID分配数据节点
      * @param rid 资源代码
-     * @param type 数据类型 objects=DataObject, blobIds=DataBlobIds, blobs=DataBlob
+     * @param type 数据类型 objects=DataObject, blobIds=DataBlobRef, blobs=DataBlob
      * @param distKey 映射主键
      * @param isUpdate 是否是更新操作
      * @param userData 自定义调度参数

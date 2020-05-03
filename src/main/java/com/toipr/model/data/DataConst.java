@@ -46,9 +46,8 @@ public class DataConst {
      */
     public static final int BlobSize_256B = 256;
     public static final int BlobSize_1KB = 1024;
-    public static final int BlobSize_4KB = 2048;
-    public static final int BlobSize_16KB = 16*1024;
-    public static final int BlobSize_64KB = 64*1024;
+    public static final int BlobSize_2KB = 2048;
+    public static final int BlobSize_4KB = 4*1024;
 
     /**
      * 大数字对象数据块
@@ -98,7 +97,7 @@ public class DataConst {
      * 底层三种数据类型，数据对象objects, 数据块索引blobIds, 数据块blobs
      */
     public static final String DataType_Object = "objects";
-    public static final String DataType_BlobIds = "blobIds";
+    public static final String DataType_BlobRef = "blobref";
     public static final String DataType_Blob = "blobs";
 
     /**

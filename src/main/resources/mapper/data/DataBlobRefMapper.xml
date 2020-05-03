@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.toipr.mapper.data.DataBlobIdsMapper">
+<mapper namespace="com.toipr.mapper.data.DataBlobRefMapper">
     <select id="tableExists"  resultType="int">
         select count(1) from information_schema.TABLES where TABLE_SCHEMA=#{dbName} and TABLE_NAME=#{tblName}
     </select>
@@ -22,10 +22,10 @@
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
     </update>
 
-    <select id="getObject" resultType="com.toipr.model.data.DataBlobIds">
+    <select id="getObject" resultType="com.toipr.model.data.DataBlobRef">
         select * from ${table} where uuid=#{uuid} and boid=#{boid}
     </select>
-    <select id="getObjects" resultType="com.toipr.model.data.DataBlobIds">
+    <select id="getObjects" resultType="com.toipr.model.data.DataBlobRef">
         select * from ${table} where uuid=#{uuid} order by serial asc
     </select>
 
@@ -43,7 +43,7 @@
         delete from ${table} where uuid=#{uuid} and boid=#{boid}
     </delete>
 
-    <insert id="addObject" parameterType="com.toipr.model.data.DataBlobIds">
+    <insert id="addObject" parameterType="com.toipr.model.data.DataBlobRef">
         insert into ${table}(uuid, boid, serial, offset, size, hash) values(#{item.uuid},
           #{item.boid}, #{item.serial}, #{item.offset}, #{item.size}, #{item.hash})
     </insert>

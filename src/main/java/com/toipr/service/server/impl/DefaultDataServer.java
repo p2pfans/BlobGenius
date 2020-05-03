@@ -4,7 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSONObject;
 import com.toipr.conf.MybatisConfig;
 import com.toipr.mapper.data.DataBlobMapper;
-import com.toipr.mapper.data.DataBlobIdsMapper;
+import com.toipr.mapper.data.DataBlobRefMapper;
 import com.toipr.mapper.data.DataObjectMapper;
 import com.toipr.mapper.data.DatabaseMapper;
 import com.toipr.model.data.*;
@@ -15,7 +15,6 @@ import com.toipr.service.data.BlobStore;
 import com.toipr.service.data.BlobStores;
 import com.toipr.service.data.DataHandler;
 import com.toipr.service.data.DataHandlers;
-import com.toipr.service.data.impl.GZipHandler;
 import com.toipr.service.node.NodeService;
 import com.toipr.service.node.NodeServices;
 import com.toipr.service.rule.RuleRouter;
@@ -580,9 +579,9 @@ public class DefaultDataServer implements DataServer {
         visit.incVisit();
         Object ret = null;
         try {
-            String table = getTableName(doid, null, DataConst.DataType_BlobIds, null);
+            String table = getTableName(doid, null, DataConst.DataType_BlobRef, null);
             try (SqlSession session = mybatis.getSession()) {
-                DataBlobIdsMapper mapper = session.getMapper(DataBlobIdsMapper.class);
+                DataBlobRefMapper mapper = session.getMapper(DataBlobRefMapper.class);
                 ret = mapper.objectExists(doid, table);
             }
         } catch(Exception ex){
@@ -610,16 +609,16 @@ public class DefaultDataServer implements DataServer {
      * @param obj 数据对象ID串
      * @return 数据记录号，不唯一，大于0成功
      */
-    public int addBlobIds(DataBlobIds obj){
+    public int addBlobIds(DataBlobRef obj){
         return addBlobIds(obj, DataServer.biChain);
     }
-    public int addBlobIds(DataBlobIds obj, int direction){
+    public int addBlobIds(DataBlobRef obj, int direction){
         visit.incVisit();
         int ret = 0;
         try {
-            String table = getTableName(obj.getUuid(), null, DataConst.DataType_BlobIds, obj);
+            String table = getTableName(obj.getUuid(), null, DataConst.DataType_BlobRef, obj);
             try (SqlSession session = mybatis.getSession()) {
-                DataBlobIdsMapper mapper = session.getMapper(DataBlobIdsMapper.class);
+                DataBlobRefMapper mapper = session.getMapper(DataBlobRefMapper.class);
                 ret = mapper.addObject(obj, table);
                 if (ret > 0) {
                     session.commit();
@@ -653,9 +652,9 @@ public class DefaultDataServer implements DataServer {
         visit.incVisit();
         int ret = 0;
         try {
-            String table = getTableName(doid, null, DataConst.DataType_BlobIds, null);
+            String table = getTableName(doid, null, DataConst.DataType_BlobRef, null);
             try (SqlSession session = mybatis.getSession()) {
-                DataBlobIdsMapper mapper = session.getMapper(DataBlobIdsMapper.class);
+                DataBlobRefMapper mapper = session.getMapper(DataBlobRefMapper.class);
                 ret = mapper.removeObject(doid, table);
                 if (ret > 0) {
                     session.commit();
@@ -682,16 +681,16 @@ public class DefaultDataServer implements DataServer {
      * @param doid 数据对象ID
      * @return 数据记录号，不唯一，大于0成功
      */
-    public DataBlobIds getBlobIds(String doid, String boid){
+    public DataBlobRef getBlobIds(String doid, String boid){
         return getBlobIds(doid, boid, DataServer.biChain);
     }
-    public DataBlobIds getBlobIds(String doid, String boid, int direction){
+    public DataBlobRef getBlobIds(String doid, String boid, int direction){
         visit.incVisit();
-        DataBlobIds ret = null;
+        DataBlobRef ret = null;
         try {
-            String table = getTableName(doid, null, DataConst.DataType_BlobIds, null);
+            String table = getTableName(doid, null, DataConst.DataType_BlobRef, null);
             try (SqlSession session = mybatis.getSession()) {
-                DataBlobIdsMapper mapper = session.getMapper(DataBlobIdsMapper.class);
+                DataBlobRefMapper mapper = session.getMapper(DataBlobRefMapper.class);
                 ret = mapper.getObject(doid, boid, table);
             }
         } catch(Exception ex){
@@ -728,16 +727,16 @@ public class DefaultDataServer implements DataServer {
      * @param doid 数字对象ID
      * @return 成功=数据块索引列表
      */
-    public List<DataBlobIds> getBlobIds(String doid){
+    public List<DataBlobRef> getBlobIds(String doid){
         return getBlobIds(doid, DataServer.allChain);
     }
-    public List<DataBlobIds> getBlobIds(String doid, int direction){
+    public List<DataBlobRef> getBlobIds(String doid, int direction){
         visit.incVisit();
-        List<DataBlobIds> rlist = null;
+        List<DataBlobRef> rlist = null;
         try {
-            String table = getTableName(doid, null, DataConst.DataType_BlobIds, null);
+            String table = getTableName(doid, null, DataConst.DataType_BlobRef, null);
             try (SqlSession session = mybatis.getSession()) {
-                DataBlobIdsMapper mapper = session.getMapper(DataBlobIdsMapper.class);
+                DataBlobRefMapper mapper = session.getMapper(DataBlobRefMapper.class);
                 rlist = mapper.getObjects(doid, table);
             }
         } catch(Exception ex){
@@ -763,7 +762,7 @@ public class DefaultDataServer implements DataServer {
                  * 解决问题2：数据同步延迟导致临时缺失
                  * 解决问题3：服务器故障或程序故障导致的数据异常
                  */
-                for(DataBlobIds temp:rlist) {
+                for(DataBlobRef temp:rlist) {
                     addBlobIds(temp, DataServer.noChain);
                 }
             }
@@ -1141,10 +1140,10 @@ public class DefaultDataServer implements DataServer {
 
             case "addBlobIds":
                 if (nextServer != null && isRightDirection(direction, DataServer.nextChain)) {
-                    nextServer.addBlobIds((DataBlobIds)target, DataServer.nextChain);
+                    nextServer.addBlobIds((DataBlobRef)target, DataServer.nextChain);
                 }
                 if (prevServer != null && isRightDirection(direction, DataServer.prevChain)) {
-                    prevServer.addBlobIds((DataBlobIds)target, DataServer.prevChain);
+                    prevServer.addBlobIds((DataBlobRef)target, DataServer.prevChain);
                 }
                 break;
             case "removeBlobIds":
@@ -1271,8 +1270,8 @@ public class DefaultDataServer implements DataServer {
                         //创建数据表，成功ret=1
                         mapper.createTable(tblName);
                     }
-                } else if(dataType.compareTo(DataConst.DataType_BlobIds)==0){
-                    DataBlobIdsMapper mapper = session.getMapper(DataBlobIdsMapper.class);
+                } else if(dataType.compareTo(DataConst.DataType_BlobRef)==0){
+                    DataBlobRefMapper mapper = session.getMapper(DataBlobRefMapper.class);
                     ret = mapper.tableExists(rule.getDbName(), tblName);
                     if(ret==0){
                         mapper.createTable(tblName);

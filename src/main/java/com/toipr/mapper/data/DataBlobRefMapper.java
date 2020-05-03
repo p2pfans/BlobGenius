@@ -1,11 +1,11 @@
 package com.toipr.mapper.data;
 
-import com.toipr.model.data.DataBlobIds;
+import com.toipr.model.data.DataBlobRef;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface DataBlobIdsMapper {
+public interface DataBlobRefMapper {
     /**
      * 创建数据表
      * @param tblName 数据表名称
@@ -28,7 +28,7 @@ public interface DataBlobIdsMapper {
      * @param table 数据表名称
      * @return 受影响的记录数
      */
-    int addObject(@Param("item") DataBlobIds item, @Param("table") String table);
+    int addObject(@Param("item") DataBlobRef item, @Param("table") String table);
 
     /**
      * 根据uuid查询数据表table的数据块关联对象
@@ -37,7 +37,7 @@ public interface DataBlobIdsMapper {
      * @param table 数据表名称
      * @return 返回FileBlob对象
      */
-    DataBlobIds getObject(@Param("uuid") String uuid, @Param("boid") String boid, @Param("table") String table);
+    DataBlobRef getObject(@Param("uuid") String uuid, @Param("boid") String boid, @Param("table") String table);
 
     /**
      * 获取数字对象uuid的关联对象列表
@@ -45,7 +45,7 @@ public interface DataBlobIdsMapper {
      * @param table 数据表名称
      * @return 成功=数据块关联对象列表
      */
-    List<DataBlobIds> getObjects(@Param("uuid") String uuid, @Param("table") String table);
+    List<DataBlobRef> getObjects(@Param("uuid") String uuid, @Param("table") String table);
 
     /**
      * 数字对象uuid的关联数据块是否存在

@@ -3,7 +3,7 @@ package com.toipr.service.data.impl;
 import com.toipr.model.data.DataBlob;
 import com.toipr.model.data.DataConst;
 import com.toipr.model.data.DataObject;
-import com.toipr.model.data.DataBlobIds;
+import com.toipr.model.data.DataBlobRef;
 import com.toipr.service.server.DataNodeRouter;
 import com.toipr.service.server.DataServer;
 import com.toipr.service.server.DataServers;
@@ -139,15 +139,15 @@ public class DefaultDataObjectInputStream extends InputStream {
     }
 
     protected synchronized void initBlobIds() throws IOException {
-        DataServer server = nodeRouter.getServer(dataObject.getRid(), DataConst.DataType_BlobIds, dataObject.getDoid(), dataObject.getOid(), false, dataObject);
-        List<DataBlobIds> oids = server.getBlobIds(dataObject.getDoid());
+        DataServer server = nodeRouter.getServer(dataObject.getRid(), DataConst.DataType_BlobRef, dataObject.getDoid(), dataObject.getOid(), false, dataObject);
+        List<DataBlobRef> oids = server.getBlobIds(dataObject.getDoid());
         if (oids == null) {
             throw new IOException("blobids not found");
         }
 
         int index = 0;
         blobIds = new String[oids.size()];
-        for(DataBlobIds temp:oids){
+        for(DataBlobRef temp:oids){
             blobIds[index++] = temp.getBoid();
         }
     }

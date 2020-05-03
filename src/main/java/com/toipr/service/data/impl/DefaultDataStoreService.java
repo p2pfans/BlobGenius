@@ -1,7 +1,7 @@
 package com.toipr.service.data.impl;
 
 import com.toipr.model.data.DataBlob;
-import com.toipr.model.data.DataBlobIds;
+import com.toipr.model.data.DataBlobRef;
 import com.toipr.model.data.DataConst;
 import com.toipr.model.data.DataObject;
 import com.toipr.service.data.DataStoreService;
@@ -82,9 +82,9 @@ public class DefaultDataStoreService implements DataStoreService, HashConsumer{
      * @param uuid 数据对象ID串
      * @return 数据块ID串对象
      */
-    public List<DataBlobIds> getBlobIds(String rid, String uuid){
+    public List<DataBlobRef> getBlobIds(String rid, String uuid){
         DataNodeRouter router = DataServers.getInstance();
-        DataServer server = router.getServer(rid, DataConst.DataType_BlobIds, uuid, null, false, null);
+        DataServer server = router.getServer(rid, DataConst.DataType_BlobRef, uuid, null, false, null);
         if(server==null){
             return null;
         }
@@ -135,7 +135,7 @@ public class DefaultDataStoreService implements DataStoreService, HashConsumer{
                 return false;
             }
 
-            DataBlobIds item = new DataBlobIds();
+            DataBlobRef item = new DataBlobRef();
             item.setUuid(uuid);
             item.setBoid(boid);
             item.setHash(hash);
@@ -362,7 +362,7 @@ public class DefaultDataStoreService implements DataStoreService, HashConsumer{
 
         boolean ret = DataStoreHelper.saveBlob(boid, fobj.getFlags(), hashStr, data, off, len, fobj);
         if(ret){
-            DataBlobIds item = new DataBlobIds();
+            DataBlobRef item = new DataBlobRef();
             item.setUuid(fobj.getUuid());
             item.setBoid(boid);
             item.setHash(hashStr);

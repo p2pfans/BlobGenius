@@ -1,7 +1,7 @@
 package com.toipr.service.data.impl;
 
 import com.toipr.model.data.DataBlob;
-import com.toipr.model.data.DataBlobIds;
+import com.toipr.model.data.DataBlobRef;
 import com.toipr.model.data.DataConst;
 import com.toipr.model.data.DataObject;
 import com.toipr.service.server.DataNodeRouter;
@@ -56,9 +56,9 @@ public class DataStoreHelper {
         return false;
     }
 
-    public static boolean addBlobIds(String rid, String oid, DataBlobIds item){
+    public static boolean addBlobIds(String rid, String oid, DataBlobRef item){
         DataNodeRouter router = DataServers.getInstance();
-        DataServer server = router.getServer(rid, DataConst.DataType_BlobIds, item.getUuid(), null, true, null);
+        DataServer server = router.getServer(rid, DataConst.DataType_BlobRef, item.getUuid(), null, true, null);
         if(server==null){
             return false;
         }
@@ -158,17 +158,17 @@ public class DataStoreHelper {
          * 优化I/O性能的一种有效手段，避免短时重传时减少写操作
          */
         DataNodeRouter router = DataServers.getInstance();
-        DataServer server = router.getServer(rid, DataConst.DataType_BlobIds, uuid, oid, true, fobj);
+        DataServer server = router.getServer(rid, DataConst.DataType_BlobRef, uuid, oid, true, fobj);
         if(server==null){
             return;
         }
 
-        List<DataBlobIds> plist = server.getBlobIds(uuid);
+        List<DataBlobRef> plist = server.getBlobIds(uuid);
         if(plist==null || plist.size()==0){
             return;
         }
 
-        for(DataBlobIds item:plist){
+        for(DataBlobRef item:plist){
             server = router.getServer(rid, DataConst.DataType_Blob, item.getBoid(), oid, true, fobj);
             if(server!=null){
                 server.decBlobRefs(item.getBoid());
@@ -190,7 +190,7 @@ public class DataStoreHelper {
          * 清除文件块ID串对象
          */
         DataNodeRouter router = DataServers.getInstance();
-        DataServer server = router.getServer(fobj.getRid(), DataConst.DataType_BlobIds, fobj.getUuid(), fobj.getOid(), true, fobj);
+        DataServer server = router.getServer(fobj.getRid(), DataConst.DataType_BlobRef, fobj.getUuid(), fobj.getOid(), true, fobj);
         if(server!=null){
             server.removeBlobIds(fobj.getUuid());
         }

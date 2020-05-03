@@ -45,14 +45,14 @@ public interface DataNodeRouter {
     /**
      * 获取服务器路由主键
      * @param rid 资源代码
-     * @param type 数据类型 objects=DataObject, blobIds=DataBlobIds, blobs=DataBlob
-     * @param doid 数据对象ID
+     * @param type 数据类型 objects=DataObject, blobIds=DataBlobRef, blobs=DataBlob
+     * @param uuid 数据对象ID
      * @param oid 拥有者ID
      * @param isTable true=数据表路由 false=数据节点路由
      * @param userData 自定义参数
      * @return 路由主键
      */
-    String getRouterKey(String rid, String type, String doid, String oid, boolean isTable, Object userData);
+    String getRouterKey(String rid, String type, String uuid, String oid, boolean isTable, Object userData);
 
     /**
      * 判断distKey主键是否属于自己调度范围
@@ -64,7 +64,7 @@ public interface DataNodeRouter {
     /**
      * 根据数据类型与ID分配数据节点
      * @param rid 资源代码
-     * @param type 数据类型 objects=DataObject, blobIds=DataBlobIds, blobs=DataBlob
+     * @param type 数据类型 objects=DataObject, blobIds=DataBlobRef, blobs=DataBlob
      * @param distKey 映射主键
      * @param isUpdate 是否是更新操作
      * @param userData 自定义调度参数
@@ -75,12 +75,12 @@ public interface DataNodeRouter {
     /**
      * 根据数据类型与ID分配数据节点
      * @param rid 资源代码
-     * @param type 数据类型 objects=DataObject, blobIds=DataBlobIds, blobs=DataBlob
-     * @param doid 数据对象ID
+     * @param type 数据类型 objects=DataObject, blobIds=DataBlobRef, blobs=DataBlob
+     * @param uuid 数据对象ID
      * @param oid 拥有者ID
      * @param isUpdate 是否是更新操作
      * @param userData 自定义调度参数
      * @return 数据服务器
      */
-    DataServer getServer(String rid, String type, String doid, String oid, boolean isUpdate, Object userData);
+    DataServer getServer(String rid, String type, String uuid, String oid, boolean isUpdate, Object userData);
 }

@@ -1,7 +1,7 @@
 package com.toipr.service.server.impl;
 
 import com.toipr.model.data.DataBlob;
-import com.toipr.model.data.DataBlobIds;
+import com.toipr.model.data.DataBlobRef;
 import com.toipr.model.data.DataObject;
 import com.toipr.service.server.DataServer;
 import com.toipr.util.threads.ThreadPoolWorker;
@@ -68,8 +68,8 @@ public class DataWorker implements Runnable {
         if(target!=null) {
             if (target instanceof DataBlob) {
                 server.addBlob((DataBlob) target, isCopy, direction);
-            } else if (target instanceof DataBlobIds) {
-                server.addBlobIds((DataBlobIds) target, direction);
+            } else if (target instanceof DataBlobRef) {
+                server.addBlobIds((DataBlobRef) target, direction);
             } else {
                 server.addObject((DataObject) target, direction);
             }

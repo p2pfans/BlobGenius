@@ -2,7 +2,7 @@ package com.toipr.service.data;
 
 import com.toipr.model.data.DataBlob;
 import com.toipr.model.data.DataObject;
-import com.toipr.model.data.DataBlobIds;
+import com.toipr.model.data.DataBlobRef;
 
 import java.io.InputStream;
 import java.util.List;
@@ -26,7 +26,7 @@ public interface DataStoreService {
      * @param uuid 数据对象ID串
      * @return 数据块ID串对象
      */
-    List<DataBlobIds> getBlobIds(String rid, String uuid);
+    List<DataBlobRef> getBlobIds(String rid, String uuid);
 
     /**
      * 获取数据对象oid的数据块bid
