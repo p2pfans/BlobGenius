@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toipr.mapper.node.NameNodeMapper">
+    <select id="getAll" resultType="com.toipr.model.node.NameNode">
+        select * from name_node where 1=1
+    </select>
+
+    <select id="get" resultType="com.toipr.model.node.NameNode">
+        select * from name_node where hid=#{hid}
+    </select>
+
+    <select id="exists" resultType="java.lang.String">
+        select hid from name_node where host=#{host} and resid=#{resid}
+    </select>
+
+    <update id="setState">
+        update name_node set state=#{state} where hid=#{hid}
+    </update>
+
+    <delete id="remove">
+        delete from name_node where hid=#{hid}
+    </delete>
+
+    <insert id="add" parameterType="com.toipr.model.node.NameNode">
+        insert into name_node(hid, state, host, master, resid, dbName, timeCreate) values(#{node.hid},
+        #{node.state}, #{node.host}, #{node.master}, #{node.resid}, #{node.dbName}, #{node.tmCreate})
+    </insert>
+</mapper>

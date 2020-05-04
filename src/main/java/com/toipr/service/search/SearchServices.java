@@ -2,59 +2,35 @@ package com.toipr.service.search;
 
 import com.toipr.service.search.impl.DataObjectIndexer;
 import com.toipr.service.search.impl.DataObjectSearcher;
+import com.toipr.service.search.impl.DefaultNodeManager;
 import com.toipr.service.search.impl.DefaultObjectSearcher;
+import org.springframework.context.ApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SearchServices {
-    protected static Map<String, ObjectIndexer> mapIndexer = new HashMap<String, ObjectIndexer>();
-    protected static Map<String, ObjectSearcher> mapSearcher = new HashMap<String, ObjectSearcher>();
+    protected static NodeManager instance = null;
 
-    public static synchronized boolean createIndexer(String channel, String collection, String[] hosts, Object... args){
-        if(mapIndexer.containsKey(channel)){
-            return true;
-        }
-
-        if(channel.compareToIgnoreCase("objects")==0){
-            DataObjectIndexer indexer = new DataObjectIndexer(channel, collection);
-            if(!indexer.init(hosts, args)){
+    public static synchronized boolean createManager(ApplicationContext context, String[] mappers){
+        if(instance==null){
+            DefaultNodeManager myobj = new DefaultNodeManager(context);
+            if(!myobj.init(mappers)){
                 return false;
             }
-            mapIndexer.put(channel, indexer);
+            instance = myobj;
         }
         return true;
     }
-
-    public static ObjectIndexer getIndexer(String channel){
-        if(mapIndexer.containsKey(channel)){
-            return mapIndexer.get(channel);
-        }
-        return null;
+    public static NodeManager getManager(){
+        return instance;
     }
 
-    public static synchronized boolean createSearcher(String collection, String[] hosts, Object... args){
-        if(mapSearcher.containsKey(collection)){
-            return true;
-        }
-
-        ObjectSearcher myobj = null;
-        if(collection.compareTo("data_objects")==0){
-            myobj = new DataObjectSearcher(collection);
-        } else {
-            myobj = new DefaultObjectSearcher(collection);
-        }
-        if(!myobj.init(hosts, args)){
-            return false;
-        }
-        mapSearcher.put(collection, myobj);
-        return true;
+    public static ObjectIndexer getIndexer(String resid){
+        return instance.getIndexer(resid);
     }
 
-    public static ObjectSearcher getSearcher(String collection){
-        if(mapSearcher.containsKey(collection)){
-            return mapSearcher.get(collection);
-        }
-        return null;
+    public static ObjectSearcher getSearcher(String resid){
+        return instance.getSearcher(resid);
     }
 }

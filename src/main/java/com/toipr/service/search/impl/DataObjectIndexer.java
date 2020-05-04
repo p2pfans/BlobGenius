@@ -1,6 +1,7 @@
 package com.toipr.service.search.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.toipr.model.data.DataConst;
 import com.toipr.model.data.DataObject;
 import com.toipr.model.data.DataResource;
 import com.toipr.model.user.OrgInfo;
@@ -42,9 +43,9 @@ public class DataObjectIndexer extends DefaultObjectIndexer implements MessageHa
     protected String channel;
     protected String collection;
 
-    public DataObjectIndexer(String channel, String collection){
+    public DataObjectIndexer(String collection){
         this.collection = collection;
-        this.channel = channel;
+        this.channel = DataConst.DataType_Object;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class DataObjectIndexer extends DefaultObjectIndexer implements MessageHa
         /**
          * 订阅DataObject对象更新消息
          */
-        service.subscribe("objects", true, this);
+        service.subscribe(channel, true, this);
         return super.init(hosts, args);
     }
 

@@ -20,12 +20,12 @@ public class DataObjectSearcher extends DefaultObjectSearcher {
     protected void buildSort(SearchSourceBuilder builder, SortField sort){
         builder.sort("directory", SortOrder.DESC);
         super.buildSort(builder, sort);
-        builder.sort("tmUpload", SortOrder.DESC);
+        builder.sort("timeCreate", SortOrder.DESC);
     }
     @Override
     protected void buildSort(SearchSourceBuilder builder, List<SortField> sortList){
         builder.sort("directory", SortOrder.DESC);
         super.buildSort(builder, sortList);
-        builder.sort("tmUpload", SortOrder.DESC);
+        builder.sort("timeCreate", SortOrder.DESC);
     }
 }

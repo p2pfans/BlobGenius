@@ -116,18 +116,8 @@ public class App {
 			/**
 			 * 初始化ElasticSearch数据索引与查询服务
 			 */
-			String text = (String)settings.getProperty("es.server");
-			if(text==null || text.length()<6){
-				System.exit(-1);
-				return;
-			}
-			String[] hosts = text.split(";");
-			String collection = (String)settings.getProperty("es.collection");
-			if(!SearchServices.createIndexer("objects", collection, hosts)){
-				System.exit(-1);
-				return;
-			}
-			if(!SearchServices.createSearcher(collection, hosts)){
+			mappers = new String[]{"classpath:/mapper/node/NameNodeMapper.xml"};
+			if(!SearchServices.createManager(ctx, mappers)){
 				System.exit(-1);
 				return;
 			}
@@ -149,6 +139,7 @@ public class App {
 				return;
 			}
 			//doTestClient();
+			//doCreateNameNodeId("http://localhost:9200", "Ky4bJyO3");
 		}
 	}
 
@@ -168,6 +159,17 @@ public class App {
 		}
 		myapp.runTest();
 		System.out.println("client run test completed");
+	}
+
+	protected static void doCreateNameNodeId(String host, String resid) throws Exception {
+		String idstr = String.format("%s_%s", host, resid);
+		try {
+			byte[] hashBytes = HashHelper.computeHashBytes(idstr.getBytes("utf-8"), "SHA-256");
+			idstr = HashHelper.getShortHashStr(hashBytes, 8);
+			System.out.println(host + " id= " + idstr);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 
 	protected static void doCreateHostid(String host, String dataType) throws Exception {

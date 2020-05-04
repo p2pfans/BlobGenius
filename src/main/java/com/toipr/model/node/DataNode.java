@@ -7,28 +7,6 @@ import java.util.Date;
  */
 public class DataNode {
     /**
-     * 正常状态，默认
-     */
-    public static final int state_normal = 0;
-    /**
-     * 服务器在线，有心跳报送
-     */
-    public static final int state_online = 1;
-    /**
-     * 数据维护，暂停服务
-     */
-    public static final int state_maintain = 3;
-
-    /**
-     * 服务器故障
-     */
-    public static final int state_error = 5;
-    /**
-     * 服务器停止
-     */
-    public static final int state_stopped = 7;
-
-    /**
      * 记录ID
      */
     private int id;

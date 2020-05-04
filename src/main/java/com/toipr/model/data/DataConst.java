@@ -120,4 +120,26 @@ public class DataConst {
      * 删除标记，删除程序择时处理
      */
     public static final int Object_Erasable = 13;
+
+
+    /**
+     * 正常状态，默认
+     */
+    public static final int host_normal = 0;
+    /**
+     * 服务器在线，有心跳报送
+     */
+    public static final int host_online = 1;
+    /**
+     * 数据维护，暂停服务
+     */
+    public static final int host_maintain = 3;
+    /**
+     * 服务器故障
+     */
+    public static final int host_error = 5;
+    /**
+     * 服务器停止
+     */
+    public static final int host_stopped = 7;
 }

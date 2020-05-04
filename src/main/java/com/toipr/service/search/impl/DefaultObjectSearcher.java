@@ -1,6 +1,7 @@
 package com.toipr.service.search.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.toipr.service.DefaultService;
 import com.toipr.service.search.ObjectSearcher;
 import com.toipr.service.search.SortField;
 import org.apache.http.HttpHost;
