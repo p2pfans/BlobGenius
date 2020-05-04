@@ -890,7 +890,7 @@ public class DefaultDataServer implements DataServer {
         JSONObject jobj = DataObjectHelper.fromObject(obj);
         json.put("action", "add");
         json.put("object", jobj.toString());
-        service.publish("objects", json.toString());
+        service.publish(DataConst.DataType_Object, json.toString());
     }
 
     /**
